@@ -72,19 +72,19 @@ public class AgentBuilderDescriptionStrategyTest {
 
     @Test
     public void testSuperTypeLoading() throws Exception {
-        assertThat(AgentBuilder.DescriptionStrategy.Default.HYBRID.withSuperTypeLoading(), is((AgentBuilder.DescriptionStrategy) new AgentBuilder.DescriptionStrategy.SuperTypeLoading(AgentBuilder.DescriptionStrategy.Default.HYBRID)));
-        assertThat(AgentBuilder.DescriptionStrategy.Default.POOL_FIRST.withSuperTypeLoading(), is((AgentBuilder.DescriptionStrategy) new AgentBuilder.DescriptionStrategy.SuperTypeLoading(AgentBuilder.DescriptionStrategy.Default.POOL_FIRST)));
-        assertThat(AgentBuilder.DescriptionStrategy.Default.POOL_ONLY.withSuperTypeLoading(), is((AgentBuilder.DescriptionStrategy) new AgentBuilder.DescriptionStrategy.SuperTypeLoading(AgentBuilder.DescriptionStrategy.Default.POOL_ONLY)));
+        assertThat(AgentBuilder.DescriptionStrategy.Default.HYBRID.withSuperTypeLoading(), instanceOf(AgentBuilder.DescriptionStrategy.SuperTypeLoading.class));
+        assertThat(AgentBuilder.DescriptionStrategy.Default.POOL_FIRST.withSuperTypeLoading(), instanceOf(AgentBuilder.DescriptionStrategy.SuperTypeLoading.class));
+        assertThat(AgentBuilder.DescriptionStrategy.Default.POOL_ONLY.withSuperTypeLoading(), instanceOf(AgentBuilder.DescriptionStrategy.SuperTypeLoading.class));
     }
 
     @Test
     public void testAsynchronousSuperTypeLoading() throws Exception {
         ExecutorService executorService = mock(ExecutorService.class);
         assertThat(AgentBuilder.DescriptionStrategy.Default.HYBRID.withSuperTypeLoading(executorService),
-                is((AgentBuilder.DescriptionStrategy) new AgentBuilder.DescriptionStrategy.SuperTypeLoading.Asynchronous(AgentBuilder.DescriptionStrategy.Default.HYBRID, executorService)));
+                instanceOf(AgentBuilder.DescriptionStrategy.SuperTypeLoading.Asynchronous.class));
         assertThat(AgentBuilder.DescriptionStrategy.Default.POOL_FIRST.withSuperTypeLoading(executorService),
-                is((AgentBuilder.DescriptionStrategy) new AgentBuilder.DescriptionStrategy.SuperTypeLoading.Asynchronous(AgentBuilder.DescriptionStrategy.Default.POOL_FIRST, executorService)));
+                instanceOf(AgentBuilder.DescriptionStrategy.SuperTypeLoading.Asynchronous.class));
         assertThat(AgentBuilder.DescriptionStrategy.Default.POOL_ONLY.withSuperTypeLoading(executorService),
-                is((AgentBuilder.DescriptionStrategy) new AgentBuilder.DescriptionStrategy.SuperTypeLoading.Asynchronous(AgentBuilder.DescriptionStrategy.Default.POOL_ONLY, executorService)));
+                instanceOf(AgentBuilder.DescriptionStrategy.SuperTypeLoading.Asynchronous.class));
     }
 }

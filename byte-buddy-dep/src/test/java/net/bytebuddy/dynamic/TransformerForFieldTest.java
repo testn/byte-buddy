@@ -6,12 +6,14 @@ import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.modifier.ModifierContributor;
 import net.bytebuddy.description.type.TypeDefinition;
 import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.test.utility.MockitoRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.Collections;
 
@@ -31,7 +33,7 @@ public class TransformerForFieldTest {
     public TestRule mocktioRule = new MockitoRule(this);
 
     @Mock
-    private TypeDescription instrumentedType, rawDeclaringType, rawReturnType, rawParameterType;
+    private TypeDescription instrumentedType;
 
     @Mock
     private Transformer<FieldDescription.Token> tokenTransformer;
@@ -58,7 +60,7 @@ public class TransformerForFieldTest {
     @SuppressWarnings("unchecked")
     public void setUp() throws Exception {
         when(fieldType.accept(any(TypeDescription.Generic.Visitor.class))).thenReturn(fieldType);
-        when(fieldDescription.asToken(none())).thenReturn(fieldToken);
+        when(fieldDescription.asToken(any(ElementMatcher.class))).thenReturn(fieldToken);
         when(fieldDescription.getDeclaringType()).thenReturn(declaringType);
         when(fieldDescription.asDefined()).thenReturn(definedField);
         when(fieldToken.getName()).thenReturn(FOO);

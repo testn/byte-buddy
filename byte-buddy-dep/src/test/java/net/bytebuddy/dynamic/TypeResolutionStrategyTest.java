@@ -4,6 +4,7 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeInitializer;
 import net.bytebuddy.implementation.LoadedTypeInitializer;
+import net.bytebuddy.implementation.bytecode.ByteCodeAppender;
 import net.bytebuddy.test.utility.MockitoRule;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -76,7 +77,7 @@ public class TypeResolutionStrategyTest {
         Field field = TypeResolutionStrategy.Active.Resolved.class.getDeclaredField("identification");
         field.setAccessible(true);
         int identification = (Integer) field.get(resolved);
-        when(typeInitializer.expandWith(new NexusAccessor.InitializationAppender(identification))).thenReturn(otherTypeInitializer);
+        when(typeInitializer.expandWith(any(ByteCodeAppender.class))).thenReturn(otherTypeInitializer);
         assertThat(resolved.injectedInto(typeInitializer), is(otherTypeInitializer));
         assertThat(resolved.initialize(dynamicType, classLoader, classLoadingStrategy),
                 is(Collections.<TypeDescription, Class<?>>singletonMap(typeDescription, Foo.class)));

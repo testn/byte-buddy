@@ -11,6 +11,7 @@ import net.bytebuddy.description.type.TypeDefinition;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.description.type.TypeList;
 import net.bytebuddy.description.type.TypeVariableToken;
+import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.test.utility.MockitoRule;
 import org.junit.Before;
 import org.junit.Rule;
@@ -76,7 +77,7 @@ public class TransformerForMethodTest {
         when(typeVariableBound.getSymbol()).thenReturn(QUX);
         when(typeVariableBound.getSort()).thenReturn(TypeDefinition.Sort.VARIABLE);
         when(typeVariableBound.asGenericType()).thenReturn(typeVariableBound);
-        when(methodDescription.asToken(none())).thenReturn(methodToken);
+        when(methodDescription.asToken(any(ElementMatcher.class))).thenReturn(methodToken);
         when(methodDescription.getDeclaringType()).thenReturn(declaringType);
         when(methodDescription.asDefined()).thenReturn(definedMethod);
         when(methodToken.getName()).thenReturn(FOO);

@@ -3,11 +3,13 @@ package net.bytebuddy.dynamic.scaffold;
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.test.utility.MockitoRule;
+import org.hamcrest.CoreMatchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.mockito.Mock;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -57,7 +59,7 @@ public class FieldLocatorForExactTypeTest {
 
     @Test
     public void testFactory() throws Exception {
-        assertThat(new FieldLocator.ForExactType.Factory(locatedType).make(typeDescription), is((FieldLocator) new FieldLocator.ForExactType(locatedType, typeDescription)));
+        assertThat(new FieldLocator.ForExactType.Factory(locatedType).make(typeDescription), instanceOf(FieldLocator.ForExactType.class));
     }
 
     @SuppressWarnings("unused")

@@ -59,7 +59,6 @@ public class MethodInvocationGenericTest {
         when(methodReturnType.asErasure()).thenReturn(genericErasure);
         StackManipulation stackManipulation = MethodInvocation.invoke(methodDescription);
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is((StackManipulation) new MethodInvocation.OfGenericMethod(genericErasure, MethodInvocation.invoke(declaredMethod))));
     }
 
     @Test
@@ -67,7 +66,6 @@ public class MethodInvocationGenericTest {
         when(methodReturnType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = MethodInvocation.invoke(methodDescription);
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is((StackManipulation) MethodInvocation.invoke(declaredMethod)));
     }
 
     @Test
@@ -77,8 +75,6 @@ public class MethodInvocationGenericTest {
         when(genericErasure.asErasure()).thenReturn(genericErasure);
         StackManipulation stackManipulation = MethodInvocation.invoke(methodDescription).virtual(targetType);
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is((StackManipulation) new StackManipulation.Compound(MethodInvocation.invoke(declaredMethod).virtual(targetType),
-                TypeCasting.to(genericErasure))));
     }
 
     @Test
@@ -86,7 +82,6 @@ public class MethodInvocationGenericTest {
         when(methodReturnType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = MethodInvocation.invoke(methodDescription).virtual(targetType);
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(MethodInvocation.invoke(declaredMethod).virtual(targetType)));
     }
 
     @Test
@@ -96,8 +91,6 @@ public class MethodInvocationGenericTest {
         when(genericErasure.asErasure()).thenReturn(genericErasure);
         StackManipulation stackManipulation = MethodInvocation.invoke(methodDescription).special(targetType);
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is((StackManipulation) new StackManipulation.Compound(MethodInvocation.invoke(declaredMethod).special(targetType),
-                TypeCasting.to(genericErasure))));
     }
 
     @Test
@@ -105,7 +98,6 @@ public class MethodInvocationGenericTest {
         when(methodReturnType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = MethodInvocation.invoke(methodDescription).special(targetType);
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(MethodInvocation.invoke(declaredMethod).special(targetType)));
     }
 
     @Test
@@ -118,10 +110,6 @@ public class MethodInvocationGenericTest {
                 Collections.<TypeDescription>emptyList(),
                 Collections.emptyList());
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(MethodInvocation.invoke(declaredMethod).dynamic(FOO,
-                otherType,
-                Collections.<TypeDescription>emptyList(),
-                Collections.emptyList())));
     }
 
     @Test
@@ -133,10 +121,6 @@ public class MethodInvocationGenericTest {
                 Collections.<TypeDescription>emptyList(),
                 Collections.emptyList());
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(MethodInvocation.invoke(declaredMethod).dynamic(FOO,
-                otherType,
-                Collections.<TypeDescription>emptyList(),
-                Collections.emptyList())));
     }
 
     @Test

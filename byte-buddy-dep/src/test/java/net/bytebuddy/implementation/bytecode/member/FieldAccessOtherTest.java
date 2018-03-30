@@ -4,19 +4,20 @@ import net.bytebuddy.description.enumeration.EnumerationDescription;
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.field.FieldList;
 import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.bytecode.StackManipulation;
-import net.bytebuddy.implementation.bytecode.assign.TypeCasting;
 import net.bytebuddy.test.utility.MockitoRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.mockito.Mock;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class FieldAccessOtherTest {
 
@@ -39,6 +40,12 @@ public class FieldAccessOtherTest {
 
     @Mock
     private FieldDescription genericField;
+
+    @Mock
+    private MethodVisitor methodVisitor;
+
+    @Mock
+    private Implementation.Context implementationContext;
 
     @Before
     public void setUp() throws Exception {
@@ -108,7 +115,6 @@ public class FieldAccessOtherTest {
         when(declaredType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = FieldAccess.forField(genericField).read();
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is((StackManipulation) new StackManipulation.Compound(FieldAccess.forField(fieldDescription).read(), TypeCasting.to(genericErasure))));
     }
 
     @Test
@@ -118,7 +124,6 @@ public class FieldAccessOtherTest {
         when(declaredType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = FieldAccess.forField(genericField).write();
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(FieldAccess.forField(fieldDescription).write()));
     }
 
     @Test
@@ -128,7 +133,6 @@ public class FieldAccessOtherTest {
         when(declaredType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = FieldAccess.forField(genericField).read();
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(FieldAccess.forField(fieldDescription).read()));
     }
 
     @Test
@@ -138,6 +142,5 @@ public class FieldAccessOtherTest {
         when(declaredType.asErasure()).thenReturn(declaredErasure);
         StackManipulation stackManipulation = FieldAccess.forField(genericField).write();
         assertThat(stackManipulation.isValid(), is(true));
-        assertThat(stackManipulation, is(FieldAccess.forField(fieldDescription).write()));
     }
 }

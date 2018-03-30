@@ -15,6 +15,7 @@ import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class MethodDescriptionTokenTest {
@@ -107,12 +108,11 @@ public class MethodDescriptionTokenTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testSignatureTokenTransformation() throws Exception {
-        when(returnType.accept(new TypeDescription.Generic.Visitor.Reducing(typeDescription, Collections.singletonList(typeVariableToken))))
-                .thenReturn(rawReturnType);
+        when(returnType.accept(any(TypeDescription.Generic.Visitor.class))).thenReturn(rawReturnType);
         when(parameterToken.getType()).thenReturn(parameterType);
-        when(parameterType.accept(new TypeDescription.Generic.Visitor.Reducing(typeDescription, Collections.singletonList(typeVariableToken))))
-                .thenReturn(rawParameterType);
+        when(parameterType.accept(any(TypeDescription.Generic.Visitor.class))).thenReturn(rawParameterType);
         assertThat(new MethodDescription.Token(FOO,
                         MODIFIERS,
                         Collections.singletonList(typeVariableToken),

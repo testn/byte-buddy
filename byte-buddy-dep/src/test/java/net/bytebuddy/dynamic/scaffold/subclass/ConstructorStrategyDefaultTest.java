@@ -15,7 +15,7 @@ import net.bytebuddy.dynamic.Transformer;
 import net.bytebuddy.dynamic.scaffold.InstrumentedType;
 import net.bytebuddy.dynamic.scaffold.MethodRegistry;
 import net.bytebuddy.implementation.attribute.MethodAttributeAppender;
-import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.LatentMatcher;
 import net.bytebuddy.test.utility.MockitoRule;
 import org.junit.Before;
@@ -71,7 +71,7 @@ public class ConstructorStrategyDefaultTest {
         when(superClass.getDeclaredMethods()).thenReturn(new MethodList.Explicit<MethodDescription.InGenericShape>(methodDescription));
         when(methodDescription.isConstructor()).thenReturn(true);
         when(methodDescription.isVisibleTo(instrumentedType)).thenReturn(true);
-        when(methodDescription.asToken(ElementMatchers.is(instrumentedType))).thenReturn(token);
+        when(methodDescription.asToken(any(ElementMatcher.class))).thenReturn(token);
         when(token.getName()).thenReturn(FOO);
         when(token.getModifiers()).thenReturn(MODIFIERS);
         when(token.getTypeVariableTokens()).thenReturn(new ByteCodeElement.Token.TokenList<TypeVariableToken>());

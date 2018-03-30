@@ -13,6 +13,7 @@ import java.util.Collections;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class FieldDescriptionTokenTest {
@@ -60,8 +61,9 @@ public class FieldDescriptionTokenTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testSignatureTokenTransformation() throws Exception {
-        when(type.accept(new TypeDescription.Generic.Visitor.Reducing(typeDescription))).thenReturn(rawType);
+        when(type.accept(any(TypeDescription.Generic.Visitor.class))).thenReturn(rawType);
         assertThat(new FieldDescription.Token(FOO, MODIFIERS, type, Collections.singletonList(annotation)).asSignatureToken(typeDescription),
                 is(new FieldDescription.SignatureToken(FOO, rawType)));
     }

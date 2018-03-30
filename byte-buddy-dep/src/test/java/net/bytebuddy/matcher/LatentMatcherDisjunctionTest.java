@@ -8,10 +8,11 @@ import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.mockito.Mock;
 
-import static net.bytebuddy.matcher.ElementMatchers.none;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class LatentMatcherDisjunctionTest {
 
@@ -19,10 +20,10 @@ public class LatentMatcherDisjunctionTest {
     public TestRule mockitoRule = new MockitoRule(this);
 
     @Mock
-    private LatentMatcher<?> left, right;
+    private LatentMatcher<Object> left, right;
 
     @Mock
-    private ElementMatcher<?> leftMatcher, rightMatcher;
+    private ElementMatcher<Object> leftResolved, rightResolved;
 
     @Mock
     private TypeDescription typeDescription;
@@ -30,14 +31,44 @@ public class LatentMatcherDisjunctionTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setUp() throws Exception {
-        when(left.resolve(typeDescription)).thenReturn((ElementMatcher) leftMatcher);
-        when(right.resolve(typeDescription)).thenReturn((ElementMatcher) rightMatcher);
+        when(left.resolve(typeDescription)).thenReturn((ElementMatcher) leftResolved);
+        when(right.resolve(typeDescription)).thenReturn((ElementMatcher) rightResolved);
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testManifestation() throws Exception {
-        assertThat(new LatentMatcher.Disjunction(left, right).resolve(typeDescription),
-                is((ElementMatcher) none().or((ElementMatcher) leftMatcher).or((ElementMatcher) rightMatcher)));
+    public void testApplicationBoth() throws Exception {
+        Object target = new Object();
+        when(leftResolved.matches(target)).thenReturn(false);
+        when(rightResolved.matches(target)).thenReturn(false);
+        assertThat(new LatentMatcher.Disjunction<Object>(left, right).resolve(typeDescription).matches(target), is(false));
+        verify(leftResolved).matches(target);
+        verifyNoMoreInteractions(leftResolved);
+        verify(rightResolved).matches(target);
+        verifyNoMoreInteractions(rightResolved);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testApplicationFirstOnly() throws Exception {
+        Object target = new Object();
+        when(leftResolved.matches(target)).thenReturn(true);
+        assertThat(new LatentMatcher.Disjunction<Object>(left, right).resolve(typeDescription).matches(target), is(true));
+        verify(leftResolved).matches(target);
+        verifyNoMoreInteractions(leftResolved);
+        verifyZeroInteractions(rightResolved);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testApplicationBothPositive() throws Exception {
+        Object target = new Object();
+        when(leftResolved.matches(target)).thenReturn(false);
+        when(rightResolved.matches(target)).thenReturn(true);
+        assertThat(new LatentMatcher.Disjunction<Object>(left, right).resolve(typeDescription).matches(target), is(true));
+        verify(leftResolved).matches(target);
+        verifyNoMoreInteractions(leftResolved);
+        verify(rightResolved).matches(target);
+        verifyNoMoreInteractions(rightResolved);
     }
 }
